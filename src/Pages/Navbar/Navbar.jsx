@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../FirebaseProvider/FirebaseProvider";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { useDarkMode } from "../../Contexts/DarkModeContext";
@@ -8,6 +8,7 @@ const Navbar = () => {
   const authContext = useContext(AuthContext);
   const { user, logout } = authContext || {};
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const location = useLocation();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -46,11 +47,29 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div
-      className={`navbar ${
-        isDarkMode ? "bg-gray-800 text-white" : "bg-[#CDE8E5] text-gray-800"
-      } lg:px-24 md:px-16 sm:px-8 px-4`}
-    >
+    <>
+      <style>{`
+        .rooms-active-dark {
+          color: #fde047 !important;
+          border-bottom: 4px solid #fde047 !important;
+          background-color: rgba(113, 63, 18, 0.4) !important;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+        }
+        .rooms-active-mobile-dark {
+          color: #fde047 !important;
+          border-left: 4px solid #fde047 !important;
+          background-color: rgba(113, 63, 18, 0.5) !important;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+        }
+        .navbar .menu li > * {
+          color: inherit !important;
+        }
+      `}</style>
+      <div
+        className={`navbar ${
+          isDarkMode ? "bg-gray-800 text-white" : "bg-[#CDE8E5] text-gray-800"
+        } lg:px-24 md:px-16 sm:px-8 px-4`}
+      >
       <div className="navbar-start">
         {/* Dropdown Menu */}
         <div className="dropdown">
@@ -87,12 +106,12 @@ const Navbar = () => {
                 className={({ isActive }) => `${
                   isDarkMode
                     ? isActive 
-                      ? "text-blue-400 bg-gray-700" 
-                      : "text-white hover:text-gray-300"
+                      ? "text-cyan-100 bg-cyan-800/50 border-l-4 border-cyan-100 shadow-lg" 
+                      : "text-white hover:text-cyan-200"
                     : isActive 
-                      ? "text-blue-600 bg-blue-50" 
-                      : "text-gray-800 hover:text-gray-600"
-                } ${isActive ? "font-bold" : "font-bold"} px-3 py-2 rounded-lg transition-colors`}
+                      ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600" 
+                      : "text-gray-800 hover:text-blue-600"
+                } font-bold px-3 py-2 rounded-lg transition-colors duration-200`}
                 onClick={handleMenuItemClick}
               >
                 Home
@@ -100,16 +119,31 @@ const Navbar = () => {
             </li>
             <li className="menu-item">
               <NavLink
-                to="/roomlist"
-                className={({ isActive }) => `${
-                  isDarkMode
-                    ? isActive 
-                      ? "text-blue-400 bg-gray-700" 
-                      : "text-white hover:text-gray-300"
-                    : isActive 
-                      ? "text-blue-600 bg-blue-50" 
-                      : "text-gray-800 hover:text-gray-600"
-                } ${isActive ? "font-bold" : "font-bold"} px-3 py-2 rounded-lg transition-colors`}
+                to="/rooms"
+                style={({ isActive }) => {
+                  const isRoomsActive = isActive || location.pathname === '/rooms';
+                  if (isDarkMode && isRoomsActive) {
+                    return {
+                      color: '#fde047 !important',
+                      borderLeft: '4px solid #fde047 !important',
+                      backgroundColor: 'rgba(113, 63, 18, 0.5) !important',
+                      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1) !important'
+                    };
+                  }
+                  return {};
+                }}
+                className={({ isActive }) => {
+                  const isRoomsActive = isActive || location.pathname === '/rooms';
+                  return `${
+                    isDarkMode
+                      ? isRoomsActive 
+                        ? "rooms-active-mobile-dark" 
+                        : "text-white hover:text-cyan-200"
+                      : isRoomsActive 
+                        ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600" 
+                        : "text-gray-800 hover:text-blue-600"
+                  } font-bold px-3 py-2 rounded-lg transition-colors duration-200`;
+                }}
                 onClick={handleMenuItemClick}
               >
                 Rooms
@@ -121,29 +155,33 @@ const Navbar = () => {
                 className={({ isActive }) => `${
                   isDarkMode
                     ? isActive 
-                      ? "text-blue-400 bg-gray-700" 
-                      : "text-white hover:text-gray-300"
+                      ? "text-cyan-100 bg-cyan-800/50 border-l-4 border-cyan-100 shadow-lg" 
+                      : "text-white hover:text-cyan-200"
                     : isActive 
-                      ? "text-blue-600 bg-blue-50" 
-                      : "text-gray-800 hover:text-gray-600"
-                } ${isActive ? "font-bold" : "font-bold"} px-3 py-2 rounded-lg transition-colors`}
+                      ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600" 
+                      : "text-gray-800 hover:text-blue-600"
+                } font-bold px-3 py-2 rounded-lg transition-colors duration-200`}
                 onClick={handleMenuItemClick}
               >
                 My Bookings
               </NavLink>
             </li>
             <li className="menu-item">
-              <a
-                href="#about"
-                className={`${
+              <NavLink
+                to="/about-us"
+                className={({ isActive }) => `${
                   isDarkMode
-                    ? "text-white hover:text-gray-300"
-                    : "text-gray-800 hover:text-gray-600"
-                } font-bold`}
+                    ? isActive 
+                      ? "text-cyan-100 bg-cyan-800/50 border-l-4 border-cyan-100 shadow-lg" 
+                      : "text-white hover:text-cyan-200"
+                    : isActive 
+                      ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600" 
+                      : "text-gray-800 hover:text-blue-600"
+                } font-bold px-3 py-2 rounded-lg transition-colors duration-200`}
                 onClick={handleMenuItemClick}
               >
                 About Us
-              </a>
+              </NavLink>
             </li>
 
             <li className="menu-item">
@@ -152,12 +190,12 @@ const Navbar = () => {
                 className={({ isActive }) => `${
                   isDarkMode
                     ? isActive 
-                      ? "text-blue-400 bg-gray-700" 
-                      : "text-white hover:text-gray-300"
+                      ? "text-cyan-100 bg-cyan-800/50 border-l-4 border-cyan-100 shadow-lg" 
+                      : "text-white hover:text-cyan-200"
                     : isActive 
-                      ? "text-blue-600 bg-blue-50" 
-                      : "text-gray-800 hover:text-gray-600"
-                } ${isActive ? "font-bold" : "font-bold"} px-3 py-2 rounded-lg transition-colors`}
+                      ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600" 
+                      : "text-gray-800 hover:text-blue-600"
+                } font-bold px-3 py-2 rounded-lg transition-colors duration-200`}
                 onClick={handleMenuItemClick}
               >
                 Contact Us
@@ -183,77 +221,91 @@ const Navbar = () => {
               className={({ isActive }) => `${
                 isDarkMode
                   ? isActive 
-                    ? "text-blue-400 bg-gray-700" 
-                    : "text-white hover:text-gray-300"
+                    ? "text-yellow-300 border-b-4 border-yellow-300 bg-yellow-900/40 shadow-lg" 
+                    : "text-gray-100 hover:text-yellow-200"
                   : isActive 
-                    ? "text-blue-600 bg-blue-50" 
-                    : "text-gray-800 hover:text-gray-600"
-              } ${isActive ? "font-bold" : "font-bold"} px-3 py-2 rounded-lg transition-colors`}
+                    ? "text-blue-700 border-b-4 border-blue-700 bg-blue-100" 
+                    : "text-gray-800 hover:text-blue-700"
+              } font-bold px-4 py-3 transition-all duration-200`}
             >
               Home
             </NavLink>
           </li>
-          <li className="active">
+          <li>
             <NavLink
-              to="/roomlist"
-              className={({ isActive }) => `${
-                isDarkMode
-                  ? isActive 
-                    ? "text-blue-400 bg-gray-700" 
-                    : "text-white hover:text-gray-300"
-                  : isActive 
-                    ? "text-blue-600 bg-blue-50" 
-                    : "text-gray-800 hover:text-gray-600"
-              } ${isActive ? "font-bold" : "font-bold"} px-3 py-2 rounded-lg transition-colors`}
+              to="/rooms"
+              style={({ isActive }) => {
+                const isRoomsActive = isActive || location.pathname === '/rooms';
+                if (isDarkMode && isRoomsActive) {
+                  return {
+                    color: '#fde047',
+                    borderBottom: '4px solid #fde047',
+                    backgroundColor: 'rgba(113, 63, 18, 0.4)',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+                  };
+                }
+                return {};
+              }}
+              className={({ isActive }) => {
+                const isRoomsActive = isActive || location.pathname === '/rooms';
+                return `${
+                  isDarkMode
+                    ? isRoomsActive 
+                      ? "rooms-active-dark" 
+                      : "text-gray-100 hover:text-yellow-200"
+                    : isRoomsActive 
+                      ? "text-blue-700 border-b-4 border-blue-700 bg-blue-100" 
+                      : "text-gray-800 hover:text-blue-700"
+                } font-bold px-4 py-3 transition-all duration-200 relative`;
+              }}
             >
               Rooms
             </NavLink>
           </li>
-          <li className="active">
+          <li>
             <NavLink
               to="/mybookings"
               className={({ isActive }) => `${
                 isDarkMode
                   ? isActive 
-                    ? "text-blue-400 bg-gray-700" 
-                    : "text-white hover:text-gray-300"
+                    ? "text-yellow-300 border-b-4 border-yellow-300 bg-yellow-900/40 shadow-lg" 
+                    : "text-gray-100 hover:text-yellow-200"
                   : isActive 
-                    ? "text-blue-600 bg-blue-50" 
-                    : "text-gray-800 hover:text-gray-600"
-              } ${isActive ? "font-bold" : "font-bold"} px-3 py-2 rounded-lg transition-colors`}
+                    ? "text-blue-700 border-b-4 border-blue-700 bg-blue-100" 
+                    : "text-gray-800 hover:text-blue-700"
+              } font-bold px-4 py-3 transition-all duration-200`}
             >
               My Bookings
             </NavLink>
           </li>
-          <li className="active">
+          <li>
             <NavLink
               to="/about-us"
               className={({ isActive }) => `${
                 isDarkMode
                   ? isActive 
-                    ? "text-blue-400 bg-gray-700" 
-                    : "text-white hover:text-gray-300"
+                    ? "text-yellow-300 border-b-4 border-yellow-300 bg-yellow-900/40 shadow-lg" 
+                    : "text-gray-100 hover:text-yellow-200"
                   : isActive 
-                    ? "text-blue-600 bg-blue-50" 
-                    : "text-gray-800 hover:text-gray-600"
-              } ${isActive ? "font-bold" : "font-bold"} px-3 py-2 rounded-lg transition-colors`}
+                    ? "text-blue-700 border-b-4 border-blue-700 bg-blue-100" 
+                    : "text-gray-800 hover:text-blue-700"
+              } font-bold px-4 py-3 transition-all duration-200`}
             >
               About Us
             </NavLink>
           </li>
-
-          <li className="active">
+          <li>
             <NavLink
               to="/contact-us"
               className={({ isActive }) => `${
                 isDarkMode
                   ? isActive 
-                    ? "text-blue-400 bg-gray-700" 
-                    : "text-white hover:text-gray-300"
+                    ? "text-yellow-300 border-b-4 border-yellow-300 bg-yellow-900/40 shadow-lg" 
+                    : "text-gray-100 hover:text-yellow-200"
                   : isActive 
-                    ? "text-blue-600 bg-blue-50" 
-                    : "text-gray-800 hover:text-gray-600"
-              } ${isActive ? "font-bold" : "font-bold"} px-3 py-2 rounded-lg transition-colors`}
+                    ? "text-blue-700 border-b-4 border-blue-700 bg-blue-100" 
+                    : "text-gray-800 hover:text-blue-700"
+              } font-bold px-4 py-3 transition-all duration-200`}
             >
               Contact Us
             </NavLink>
@@ -261,7 +313,7 @@ const Navbar = () => {
         </ul>
       </div>
 
-      {/* Navbar End */}
+      {/* Navbar End */}}
       <div className="navbar-end flex items-center gap-3">
         {/* Dark Mode Toggle */}
         <button
@@ -334,6 +386,7 @@ const Navbar = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

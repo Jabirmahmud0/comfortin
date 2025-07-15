@@ -313,7 +313,7 @@ const Navbar = () => {
         </ul>
       </div>
 
-      {/* Navbar End */}}
+      
       <div className="navbar-end flex items-center gap-3">
         {/* Dark Mode Toggle */}
         <button

@@ -334,12 +334,24 @@ const Navbar = () => {
             {/* User Info */}
             <div className="flex items-center gap-2">
               <div className="avatar">
-                <div className="w-8 h-8 rounded-full overflow-hidden">
-                  <img
-                    className="w-full h-full object-cover"
-                    src={user.photoURL || "https://i.ibb.co/QnGz7Yz/5.jpg"}
-                    alt="User Avatar"
-                  />
+                <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+                  {user.photoURL ? (
+                    <img
+                      className="w-full h-full object-cover"
+                      src={user.photoURL}
+                      alt="User Avatar"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div className={`${user.photoURL ? 'hidden' : 'flex'} w-full h-full items-center justify-center`}>
+                    <span className="text-gray-600 font-semibold text-sm">
+                      {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
+                    </span>
+                  </div>
                 </div>
               </div>
               <span className={`text-sm font-medium hidden md:block ${

@@ -1,7 +1,7 @@
 import { Input, Ripple, initTWE } from "tw-elements";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Added useLocation
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import auth from "../../Firebase/firebase.config";
 import { GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
@@ -15,7 +15,11 @@ initTWE({ Input, Ripple });
 const Login = () => {
     const { isDarkMode } = useDarkMode();
     const navigate = useNavigate();
+    const location = useLocation(); // Get current location
     const [showPassword, setShowPassword] = useState(false);
+
+    // Get the redirect path from location state, default to home if not present
+    const from = location.state?.from || '/';
 
     const handleSuccessRedirect = () => {
         Swal.fire({
@@ -25,7 +29,8 @@ const Login = () => {
             timer: 1500,
         });
         setTimeout(() => {
-            navigate('/');
+            // Redirect to the original page the user was trying to access
+            navigate(from, { replace: true });
         }, 1500);
     };
 
@@ -132,10 +137,10 @@ const Login = () => {
                                 className={`mx-1 inline-block h-9 w-9 rounded-full p-2 uppercase leading-normal shadow-primary-3 transition duration-150 ease-in-out hover:shadow-primary-2 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:shadow-primary-2 ${
                                     isDarkMode 
                                         ? 'bg-gray-700 hover:bg-gray-600 focus:bg-gray-600 active:bg-gray-600 shadow-black/30 hover:shadow-dark-strong focus:shadow-dark-strong active:shadow-dark-strong' 
-                                        : 'bg-[#CDE8E5] hover:bg-primary-accent-300 focus:bg-primary-accent-300 active:bg-primary-600'
+                                        : 'bg-gray-800 hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 text-white'
                                 }`}
                             >
-                                <FaGithub className="mx-auto h-3.5 w-3.5 text-white" />
+                                <FaGithub className="mx-auto h-3.5 w-3.5" />
                             </button>
 
                             {/* Google */}
@@ -145,10 +150,10 @@ const Login = () => {
                                 className={`mx-1 inline-block h-9 w-9 rounded-full p-2 uppercase leading-normal shadow-primary-3 transition duration-150 ease-in-out hover:shadow-primary-2 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:shadow-primary-2 ${
                                     isDarkMode 
                                         ? 'bg-gray-700 hover:bg-gray-600 focus:bg-gray-600 active:bg-gray-600 shadow-black/30 hover:shadow-dark-strong focus:shadow-dark-strong active:shadow-dark-strong' 
-                                        : 'bg-[#CDE8E5] hover:bg-primary-accent-300 focus:bg-primary-accent-300 active:bg-primary-600'
+                                        : 'bg-red-600 hover:bg-red-700 focus:bg-red-700 active:bg-red-800 text-white'
                                 }`}
                             >
-                                <FaGoogle className="mx-auto h-3.5 w-3.5 text-white" />
+                                <FaGoogle className="mx-auto h-3.5 w-3.5" />
                             </button>
                         </div>
 

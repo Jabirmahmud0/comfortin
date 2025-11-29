@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useDarkMode } from '../../Contexts/DarkModeContext';
+import { Link } from 'react-router-dom'; // Added Link import
 
 const RoomList = () => {
     const [rooms, setRooms] = useState([]);
@@ -165,7 +166,8 @@ const RoomList = () => {
                                     <span className={`text-2xl font-bold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>
                                         ${room.PricePerNight}/night
                                     </span>
-                                    <a href={`/room-details/${room.id}`}>
+                                    {/* Updated to use Link component instead of anchor tag */}
+                                    <Link to={`/room-details/${room.id}`}>
                                         <button className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                                             isDarkMode 
                                                 ? 'bg-blue-600 text-white hover:bg-blue-700' 
@@ -173,7 +175,7 @@ const RoomList = () => {
                                         }`}>
                                             Book Now
                                         </button>
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

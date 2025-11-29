@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom'; // Added useLocation
 import { useDarkMode } from '../../Contexts/DarkModeContext';
 import useAuth from '../../Components/Hooks/useAuth';
 import Swal from 'sweetalert2';
@@ -8,6 +8,7 @@ const RoomDetails = () => {
     const [room, setRoom] = useState(null);
     const { roomId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation(); // Get current location
     const { isDarkMode } = useDarkMode();
     const { user } = useAuth();
 
@@ -72,7 +73,8 @@ const RoomDetails = () => {
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    navigate('/login');
+                    // Pass the current location as state so we can redirect back after login
+                    navigate('/login', { state: { from: location.pathname } });
                 }
             });
             return;

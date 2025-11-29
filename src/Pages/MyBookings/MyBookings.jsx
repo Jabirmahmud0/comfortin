@@ -2,12 +2,15 @@ import { useDarkMode } from "../../Contexts/DarkModeContext";
 import useAuth from "../../Components/Hooks/useAuth";
 import { useEffect, useState } from "react";
 import Swal from 'sweetalert2';
+import { useNavigate, useLocation } from "react-router-dom";
 
 const MyBookings = () => {
     const { isDarkMode } = useDarkMode();
     const { user } = useAuth();
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const location = useLocation(); // Get current location
 
     useEffect(() => {
         // Fetch user's bookings from localStorage or API
@@ -68,7 +71,13 @@ const MyBookings = () => {
             <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
                 <div className={`text-center ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
                     <h2 className="text-2xl font-bold mb-4">Please log in to view your bookings</h2>
-                    <a href="/login" className="text-indigo-600 hover:text-indigo-800">Go to Login</a>
+                    {/* Updated to use Link with state for proper redirect */}
+                    <button 
+                        onClick={() => navigate('/login', { state: { from: location.pathname } })}
+                        className="text-indigo-600 hover:text-indigo-800"
+                    >
+                        Go to Login
+                    </button>
                 </div>
             </div>
         );
@@ -109,7 +118,7 @@ const MyBookings = () => {
                             You haven&apos;t made any room bookings yet. Start exploring our amazing rooms and make your first reservation!
                         </p>
                         <a 
-                            href="/roomlist" 
+                            href="/rooms" 
                             className={`inline-flex items-center px-6 py-3 rounded-lg font-medium transition-colors ${
                                 isDarkMode 
                                     ? 'bg-blue-600 hover:bg-blue-700 text-white' 

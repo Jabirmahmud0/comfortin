@@ -39,50 +39,50 @@ const Home = () => {
   };
 
   return (
-    <div className={`relative mt-12 px-16 transition-colors duration-300 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
-      <div className="relative w-full h-screen overflow-hidden">
+    <div className={`relative mt-16 md:mt-12 px-4 md:px-16 transition-colors duration-300 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+      {/* Video Banner Section */}
+      <div className="relative w-full h-[50vh] md:h-screen overflow-hidden rounded-2xl">
         <video
-          className="absolute inset-0 rounded-2xl w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
           autoPlay
           loop
           muted
         >
           <source src="/banner.mp4" type="video/mp4" />
         </video>
-      </div>
-
-      {showText && (
-        <div className={`absolute inset-0 flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-900'} bg-opacity-50`}>
-          <div className={`text-center p-8 rounded-lg ${isDarkMode ? 'text-white' : 'text-white'}`}>
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="500"
-            >
-              <h1 className="text-6xl font-bold text-[#7AB2B2]">
-                Welcome to Comfort Inn
-              </h1>
-              <p className="text-2xl mt-4">
-                Book your stay now and enjoy luxury accommodation.
-              </p>
+        
+        {showText && (
+          <div className={`absolute inset-0 flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-900'} bg-opacity-50`}>
+            <div className={`text-center p-4 md:p-8 rounded-lg ${isDarkMode ? 'text-white' : 'text-white'}`}>
+              <div
+                data-aos="fade-right"
+                data-aos-duration="1000"
+                data-aos-delay="500"
+              >
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-[#7AB2B2]">
+                  Welcome to Comfort Inn
+                </h1>
+                <p className="text-lg md:text-xl mt-2 md:mt-4">
+                  Book your stay now and enjoy luxury accommodation.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Map Component */}
-
-      <div className="mt-12 flex flex-col lg:flex-row lg:h-screen">
+      <div className="mt-8 md:mt-12 flex flex-col lg:flex-row gap-6 md:gap-0">
         {/* Left Side */}
         <div
-          className="w-full lg:w-1/2 h-64 lg:h-full flex justify-center items-center bg-cover lg:rounded-l-2xl"
+          className="w-full lg:w-1/2 h-64 lg:h-full flex justify-center items-center bg-cover rounded-2xl lg:rounded-l-2xl"
           style={{ backgroundImage: 'url("/img/map.jpg")' }}
         >
-          <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-700'} bg-opacity-80 text-white p-6 lg:p-8 lg:rounded-l-2xl mx-4 lg:mx-0 rounded-lg lg:rounded-none`}>
-            <h1 className="text-2xl lg:text-4xl font-semibold mb-4">
+          <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-700'} bg-opacity-80 text-white p-6 md:p-8 rounded-lg lg:rounded-l-2xl mx-4 lg:mx-0`}>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold mb-4">
               Find our Live Location
             </h1>
-            <p className="text-sm lg:text-lg">
+            <p className="text-sm md:text-base lg:text-lg">
               Explore the area around Kajipara, Mirpur 10, Dhaka, Bangladesh.
             </p>
           </div>
@@ -90,7 +90,7 @@ const Home = () => {
 
         {/* Right Side */}
         <div className="w-full lg:w-1/2 h-64 lg:h-full">
-          <div className="w-full h-full lg:mt-6 p-4 lg:p-0">
+          <div className="w-full h-full p-0 md:p-4 lg:p-0">
             <div
               className="w-full h-full rounded-2xl flex"
               style={{ width: "100%" }}
@@ -114,12 +114,9 @@ const Home = () => {
         </div>
       </div>
 
-
-      <div id="about" className="mt-12">
+      <div id="about" className="mt-8 md:mt-12">
         <AboutUs />
       </div>
-
-      
     </div>
   );
 };
